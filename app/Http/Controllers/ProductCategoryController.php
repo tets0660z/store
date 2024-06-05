@@ -3,24 +3,21 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
-use Inertia\Response;
-use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Models\ProductCategory;
 use Illuminate\Support\Facades\Http;
 
-use function Pest\Laravel\json;
-
-class ProductController extends Controller
+class ProductCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index($category)
     {
-        $items = Http::get('https://fakestoreapi.com/products')->json();
-        return Inertia::render('Product/Index', ['items' => $items]);
+        dd($category);
+        $categories = Http::get('https://fakestoreapi.com/products/category/jewelery')->json();
+        return Inertia::render('Product/Category/Index', ['categories' => $categories]);
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -41,7 +38,7 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Product $product)
+    public function show(ProductCategory $productCategory)
     {
         //
     }
@@ -49,7 +46,7 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Product $product)
+    public function edit(ProductCategory $productCategory)
     {
         //
     }
@@ -57,7 +54,7 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, ProductCategory $productCategory)
     {
         //
     }
@@ -65,7 +62,7 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy(ProductCategory $productCategory)
     {
         //
     }
