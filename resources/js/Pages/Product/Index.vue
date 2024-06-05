@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import CategoryItems from "./Category/CategoryItems.vue";
+import CategoryItems from "./Partials/CategoryItems.vue";
 import { Head, Link } from "@inertiajs/vue3";
 import { ref } from "vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
