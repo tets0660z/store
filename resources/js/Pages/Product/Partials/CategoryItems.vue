@@ -3,6 +3,11 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 const values = defineProps(["items", "category"]);
 
+function hasCategory(category) {
+    if (category === null) return values.items;
+    else return filteredItems;
+}
+
 function formatCategory(value) {
     let category = "";
     if (value === "mens-clothing") category = `men's clothing`;
@@ -18,7 +23,7 @@ const filteredItems = values.items.filter(
 
 <template>
     <div
-        v-for="item in filteredItems"
+        v-for="item in hasCategory(values.category)"
         class="p-6 mx-auto bg-white rounded-xl shadow-lg flex items-center space-x-4 space-y-3 mt-5"
     >
         <div class="shrink-0">

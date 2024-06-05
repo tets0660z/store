@@ -28,7 +28,10 @@ defineOptions({ layout: AuthenticatedLayout });
         <div
             class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center"
         >
+            <!-- Categories -->
             <div>
+                <Link href="product"> All Products </Link>
+                <span>|</span>
                 <Link href="product?category=mens-clothing">
                     Men's Clothing
                 </Link>
@@ -49,31 +52,7 @@ defineOptions({ layout: AuthenticatedLayout });
             />
         </div>
     </header>
-    <div
-        class="grid grid-cols-2 max-w-7xl mx-auto sm:px-6 lg:px-8"
-        v-if="$page.url === '/product'"
-    >
-        <div
-            v-for="item in items"
-            class="p-6 max-w-lg mx-auto bg-white rounded-xl shadow-lg flex items-center space-x-4 space-y-3 mt-5"
-        >
-            <div class="shrink-0">
-                <img class="h-16 w-16" :src="item.image" alt="ChitChat Logo" />
-            </div>
-            <div class="flex flex-col">
-                <div class="text-xl font-medium text-black">
-                    {{ item.title }}
-                </div>
-                <p class="text-slate-500 line-clamp-1">
-                    {{ item.description }}
-                </p>
-                <div class="ml-auto mt-8 space-x-3">
-                    <PrimaryButton>Buy Now</PrimaryButton>
-                    <SecondaryButton class="">Add to Cart</SecondaryButton>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Item Cards -->
     <div class="grid grid-cols-2 max-w-7xl mx-auto sm:px-6 lg:px-8 gap-3">
         <CategoryItems :items="items" :category="category"></CategoryItems>
     </div>
