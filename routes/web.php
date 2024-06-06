@@ -28,8 +28,5 @@ Route::middleware('auth')->group(function () {
 
 Route::resource('product', ProductController::class)->only(['index'])->middleware(['auth', 'verified']);
 
-Route::get('/product/category/{category}', function ($category) {
-        return Inertia::render('Index',  ProductCategoryController::class);
-})->middleware(['auth', 'verified']);
 
 require __DIR__ . '/auth.php';
