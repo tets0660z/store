@@ -1,17 +1,13 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import CategoryItems from "./Partials/CategoryItems.vue";
+import ProductLists from "./Partials/ProductLists.vue";
 import { Head, Link } from "@inertiajs/vue3";
 import { ref } from "vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import SecondaryButton from "@/Components/SecondaryButton.vue";
 
-defineProps(["items"]);
+import NavLink from "@/Components/NavLink.vue";
+
+const values = defineProps(["items"]);
 const search = ref("");
-
-//get uri query
-const urlParams = new URLSearchParams(window.location.search);
-const category = urlParams.get("category");
 
 // use as persistent layout
 defineOptions({ layout: AuthenticatedLayout });
@@ -20,29 +16,45 @@ defineOptions({ layout: AuthenticatedLayout });
 <template>
     <Head title="Products" />
     <header class="bg-white shadow">
-        <h2
-            class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 font-semibold text-xl text-gray-800 leading-tight"
-        >
-            Products
-        </h2>
         <div
             class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center"
         >
             <!-- Categories -->
             <div>
-                <Link href="product"> All Products </Link>
+                <NavLink
+                    :href="route('category.index', `men's clothing`)"
+                    :active="
+                        route().current('category.index', `men's clothing`)
+                    "
+                >
+                    Men's Clothing</NavLink
+                >
+
                 <span>|</span>
-                <Link href="product?category=mens-clothing">
-                    Men's Clothing
-                </Link>
+                <NavLink
+                    :href="route('category.index', `women's clothing`)"
+                    :active="
+                        route().current('category.index', `women's clothing`)
+                    "
+                >
+                    Women's Clothing</NavLink
+                >
+
                 <span>|</span>
-                <Link href="product?category=womens-clothing">
-                    Women's Clothing
-                </Link>
+                <NavLink
+                    :active="route().current('category.index', `jewelery`)"
+                    :href="route('category.index', `jewelery`)"
+                >
+                    Jewelries</NavLink
+                >
+
                 <span>|</span>
-                <Link href="product?category=electronics"> Electronics </Link>
-                <span>|</span>
-                <Link href="product?category=jewelery"> Jewelries </Link>
+                <NavLink
+                    :active="route().current('category.index', `electronics`)"
+                    :href="route('category.index', `electronics`)"
+                >
+                    Electronics</NavLink
+                >
             </div>
             <input
                 class="right-screen relative rounded-lg"
@@ -53,7 +65,7 @@ defineOptions({ layout: AuthenticatedLayout });
         </div>
     </header>
     <!-- Item Cards -->
-    <div class="grid grid-cols-2 max-w-7xl mx-auto sm:px-6 lg:px-8 gap-3">
-        <CategoryItems :items="items" :category="category"></CategoryItems>
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 gap-3" v-for="item in items">
+        <ProductLists :item="item" :category="category"></ProductLists>
     </div>
 </template>

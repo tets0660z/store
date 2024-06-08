@@ -1,11 +1,12 @@
 <?php
 
+use App\Http\Controllers\ProductCategoryController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ProductCategoryController;
+use App\Models\ProductCategory;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -26,7 +27,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::resource('product', ProductController::class)->only(['index'])->middleware(['auth', 'verified']);
+Route::resource('product', ProductController::class)->only(['index','store','show'])->middleware(['auth', 'verified']);
+
+Route::get('product/category/{category}', [ProductCategoryController::class, 'index'])->middleware(['auth', 'verified'])->name('category.index');
 
 
 require __DIR__ . '/auth.php';

@@ -7,7 +7,7 @@ import AddToCart from "./AddToCart.vue";
 
 const displayingProduct = ref(false);
 
-defineProps(["image"]);
+defineProps(["title", "description", "image"]);
 const displayProduct = () => {
     displayingProduct.value = true;
 };
@@ -48,8 +48,13 @@ const closeModal = () => {
                         {{ description }}
                     </p>
                     <div class="flex ml-auto mt-8 space-x-3">
-                        <SuccessButton>Buy Now</SuccessButton>
-                        <SecondaryButton>Add to Cart</SecondaryButton>
+                        <SuccessButton>Buy Nowasd</SuccessButton>
+
+                        <AddToCart
+                            :title="title"
+                            :image="image"
+                            :description="description"
+                        />
                     </div>
                 </div>
             </div>

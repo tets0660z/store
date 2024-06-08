@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Models\ProductCategory;
+use Inertia\Response;
 use Illuminate\Support\Facades\Http;
 
 class ProductCategoryController extends Controller
@@ -12,11 +13,12 @@ class ProductCategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index($category)
+    public function index($category): Response
     {
-        dd($category);
-        $categories = Http::get('https://fakestoreapi.com/products/category/jewelery')->json();
-        return Inertia::render('Product/Category/Index', ['categories' => $categories]);
+        
+        $categories = Http::get("https://fakestoreapi.com/products/category/$category")->json();
+        // dd($categories);
+        return Inertia::render('Product/Index', ['items' => $categories]);
     }
 
     /**

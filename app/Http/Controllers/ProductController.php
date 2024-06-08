@@ -17,11 +17,13 @@ class ProductController extends Controller
      */
     public function index(): Response
     {
+        
         $items = Http::get('https://fakestoreapi.com/products')->json();
+        
         return Inertia::render('Product/Index', ['items' => $items]);
     }
-
-
+    
+    
     /**
      * Show the form for creating a new resource.
      */
@@ -29,7 +31,7 @@ class ProductController extends Controller
     {
         //
     }
-
+    
     /**
      * Store a newly created resource in storage.
      */
@@ -37,13 +39,16 @@ class ProductController extends Controller
     {
         //
     }
-
+    
     /**
      * Display the specified resource.
      */
-    public function show(Product $product)
+    public function show($id)
     {
-        //
+   
+        $item = Http::get("https://fakestoreapi.com/products/{$id}")->json();
+        // dd($item);
+        return Inertia::render('Product/Show', ['item' => $item]);
     }
 
     /**
