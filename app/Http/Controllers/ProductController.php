@@ -18,7 +18,8 @@ class ProductController extends Controller
     public function index(): Response
     {
         
-        $items = Http::get('https://fakestoreapi.com/products')->json();
+        // $items = Http::get('https://fakestoreapi.com/products')->json();
+        $items = Product::all();
         
         return Inertia::render('Product/Index', ['items' => $items]);
     }
@@ -43,11 +44,12 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show( $id)
     {
    
-        $item = Http::get("https://fakestoreapi.com/products/{$id}")->json();
+        // $item = Http::get("https://fakestoreapi.com/products/{$id}")->json();
         // dd($item);
+        $item = Product::find($id);
         return Inertia::render('Product/Show', ['item' => $item]);
     }
 

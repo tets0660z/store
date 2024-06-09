@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductCategoryController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +29,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource('product', ProductController::class)->only(['index','store','show'])->middleware(['auth', 'verified']);
+
+Route::resource('cart', CartController::class)->only(['store'])->middleware(['auth', 'verified']);
 
 Route::get('product/category/{category}', [ProductCategoryController::class, 'index'])->middleware(['auth', 'verified'])->name('category.index');
 

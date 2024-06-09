@@ -1,14 +1,22 @@
 <script setup>
 import Modal from "@/Components/Modal.vue";
-import SuccessButton from "@/Components/SuccessButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
+import BuyNow from "./BuyNow.vue";
+import Card from "@/Components/Card.vue";
 import { ref } from "vue";
-import AddToCart from "./AddToCart.vue";
-import { Head } from "@inertiajs/vue3";
+import { Head, Link } from "@inertiajs/vue3";
+import SuccessButton from "@/Components/SuccessButton.vue";
 
 const displayingProduct = ref(false);
-const xxl = "6xl";
+const displayingCard = ref(false);
+const addToCart = ref("");
+
+function addOrBuy(aOrB) {
+    displayingCard.value = !displayingCard.value;
+    addToCart.value = aOrB;
+}
 defineProps(["item"]);
+
 const displayProduct = () => {
     displayingProduct.value = true;
 };
@@ -19,6 +27,7 @@ const closeModal = () => {
 </script>
 <template>
     <Head title="Product" />
+
     <Modal :show="displayingProduct" @close="closeModal" class="flex">
         <div
             @click="closeModal"
@@ -28,6 +37,7 @@ const closeModal = () => {
         </div>
         <img class="m-10 mx-auto w-3/4" :src="item.image" alt="Items" />
     </Modal>
+
     <div
         class="p-6 mx-auto bg-white rounded-xl shadow-lg flex items-center space-x-4 space-y-3 mt-5"
     >
@@ -39,9 +49,15 @@ const closeModal = () => {
                 @click="displayProduct"
             />
         </div>
-        <div class="flex flex-col">
+
+        <div class="flex flex-col w-3/4">
             <div class="text-xl font-medium text-black">
-                {{ item.title }}
+                <Link
+                    :href="route('product.show', item.id)"
+                    class="hover:text-blue-400"
+                >
+                    {{ item.title }}
+                </Link>
             </div>
             <p class="text-slate-500">
                 {{ item.description }}
@@ -50,12 +66,21 @@ const closeModal = () => {
                 <div class="text-gray-500 font-bold items-center text-lg">
                     Cost: ${{ item.price }}
                 </div>
-                <div class="text-gray-400 font-bold items-center text-lg">
-                    Available Unit:{{ item.rating.count }}
+                <div
+                    class="text-gray-400 font-bold items-center text-lg flex justify-between"
+                >
+                    <div>Available Unit:{{ item.count }}</div>
+                    <div class="flex-grow-0">
+                        <SuccessButton @click="addOrBuy('Buy Now')"
+                            >Buy Now</SuccessButton
+                        >
+                        <SecondaryButton @click="addOrBuy('Add to Cart')">
+                            Add to Cart
+                        </SecondaryButton>
+                    </div>
                 </div>
             </div>
-
-            <div class="flex gap-x-4 flex-grow-0 justify-end"></div>
         </div>
     </div>
+    <Card v-show="displayingCard" :title="addToCart" />
 </template>
