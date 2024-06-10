@@ -48,9 +48,16 @@ const showingNavigationDropdown = ref(false);
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ms-6">
-                            <!-- <NavLink :href="route('cart.index')">
+                            <NavLink
+                                :href="
+                                    route(
+                                        'cart.index',
+                                        $page.props.auth.user.id
+                                    )
+                                "
+                            >
                                 <Image src="cart.svg" alt="cart" />
-                            </NavLink> -->
+                            </NavLink>
 
                             <!-- Settings Dropdown -->
                             <div class="ms-3 relative">

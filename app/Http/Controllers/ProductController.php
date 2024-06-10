@@ -2,25 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 
 use function Pest\Laravel\json;
+use Illuminate\Support\Facades\Http;
 
 class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    public function carts($id)
+    {
+        $user = User::findOrFail($id);
+        // dd($user->products);
+
+        return Inertia::render('Cart/Index', ['items' => $user->products]);
+    }
     public function index(): Response
     {
         
-        // $items = Http::get('https://fakestoreapi.com/products')->json();
         $items = Product::all();
-        
         return Inertia::render('Product/Index', ['items' => $items]);
     }
     
@@ -49,7 +55,7 @@ class ProductController extends Controller
    
         // $item = Http::get("https://fakestoreapi.com/products/{$id}")->json();
         // dd($item);
-        $item = Product::find($id);
+        $item = Product::findOrFail($id);
         return Inertia::render('Product/Show', ['item' => $item]);
     }
 

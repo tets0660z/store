@@ -30,7 +30,11 @@ Route::middleware('auth')->group(function () {
 
 Route::resource('product', ProductController::class)->only(['index','store','show'])->middleware(['auth', 'verified']);
 
-Route::resource('cart', CartController::class)->only(['store'])->middleware(['auth', 'verified']);
+// Route::get('cart/{id}', ['as' => 'cart.index', 'uses' => 'App\Http\Controllers\CartController@index']);
+Route::get('cart/{id}', ['as' => 'cart.index', 'uses' => 'App\Http\Controllers\ProductController@carts']);
+
+Route::resource('cart', CartController::class, ['except' => ['index']])->only(['store','destroy'])->middleware(['auth', 'verified']);
+// Route::get('cart/{id}', ProductController::class, 'carts')->middleware(['auth', 'verified']);
 
 Route::get('product/category/{category}', [ProductCategoryController::class, 'index'])->middleware(['auth', 'verified'])->name('category.index');
 

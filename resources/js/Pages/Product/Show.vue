@@ -7,7 +7,6 @@ import { reactive, ref } from "vue";
 import { usePage } from "@inertiajs/vue3";
 
 const processing = ref(false);
-const addedToCart = ref(false);
 const item = defineProps({
     item: {
         type: Object,
@@ -167,6 +166,7 @@ defineOptions({ layout: AuthenticatedLayout });
                                 Add to cart
                             </button>
                             <input
+                                value="1"
                                 min="1"
                                 :max="item.item.count"
                                 type="number"

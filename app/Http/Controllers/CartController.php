@@ -3,18 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
-use Inertia\Response;
+use Inertia\Inertia;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class CartController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($id)
     {
-        //
+        // $products = DB::table('product_user')
+        //     ->join('products', 'users.id', '=', 'product_user.user_id')
+        //     ->join('users', 'users.id', '=', 'orders.user_id')
+        //     ->select('users.*', 'contacts.phone', 'orders.price')
+        //     ->get();
+
+        // return Inertia::render('Cart/Index', ['items' => $products]);
     }
 
     /**
@@ -31,7 +39,7 @@ class CartController extends Controller
     public function store(Request $request)
     {
     // get product_id
-    $product = DB::table('carts')->where('product_id',$request->product_id)->first();
+    $product = DB::table('product_user')->where('product_id',$request->product_id)->first();
 
     $validate =$request->validate
         ([
@@ -40,10 +48,10 @@ class CartController extends Controller
             'product_id'=> ['required'],
             'price'=> ['required'],
         ]);
-
+    //update or create
         if($product !== null) 
         {
-            DB::table('carts')
+            DB::table('product_user')
             ->where('product_id',$request->product_id)
             ->update(['quantity'=> ((int)$product->quantity + $request->quantity)]);
 
@@ -52,6 +60,7 @@ class CartController extends Controller
             Cart::create($validate);
             
         }
+        // return to_route('product.index');
     
 
         
@@ -84,8 +93,11 @@ class CartController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Cart $cart)
+    public function destroy( $cart)
     {
-        //
+        $item= Cart::find($cart);
+        $item->delete();
+        
+        // return redirect(route('chirps.index'));
     }
 }
