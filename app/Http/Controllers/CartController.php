@@ -37,23 +37,26 @@ class CartController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
+    
     {
-    // get product_id
-    $product = DB::table('product_user')->where('product_id',$request->product_id)->first();
-
-    $validate =$request->validate
+        
+        // dd($request->quantity);
+        // get product_id
+        $product = DB::table('product_user')->where('product_id',$request->product_id)->first();
+        
+        $validate =$request->validate
         ([
             'quantity' => ['required'],
             'user_id' => ['required'],
             'product_id'=> ['required'],
             'price'=> ['required'],
-        ]);
-    //update or create
-        if($product !== null) 
-        {
+            ]);
+            
+            if($product !== null) 
+            {
             DB::table('product_user')
             ->where('product_id',$request->product_id)
-            ->update(['quantity'=> ((int)$product->quantity + $request->quantity)]);
+            ->update(['quantity'=> ((int)$product->quantity + (int)$request->quantity)]);
 
         } else {
 
@@ -87,7 +90,10 @@ class CartController extends Controller
      */
     public function update(Request $request, Cart $cart)
     {
-        //
+        DB::table('product_user')
+        ->where('id',$cart->id)
+        ->update(['quantity'=> ($request->quantity)]);
+        // dd($request->quantity);
     }
 
     /**

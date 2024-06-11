@@ -1,17 +1,16 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, Link } from "@inertiajs/vue3";
-import { ref, reactive } from "vue";
 import { router } from "@inertiajs/vue3";
-import NavLink from "@/Components/NavLink.vue";
+import { ref } from "vue";
 import Swal from "sweetalert2";
 
-defineProps(["items"]);
+const item = defineProps(["items"]);
 
 function deleteToCart(id) {
     Swal.fire({
-        title: "Remove!",
-        text: "Do you want to continue",
+        title: "Remove from your cart!",
+        text: "Do you want to continue?",
         icon: "question",
         confirmButtonText: "remove",
         showCancelButton: true,
@@ -32,17 +31,40 @@ function deleteToCart(id) {
     });
 }
 
+const disabled = ref(false);
+function addOrMinus(quantity, id, operator) {
+    if (operator === "add") {
+        quantity += 1;
+        disabled.value = false;
+    } else {
+        if (quantity === 1) {
+            disabled.value = true;
+        } else {
+            quantity -= 1;
+        }
+    }
+    router.patch(
+        `/cart/${id}`,
+        { quantity: quantity },
+        { preserveScroll: true }
+    );
+}
+
+const totalCost = item.items.map((result) => {
+    return parseInt(result.price);
+});
+const init = 0;
+console.log(totalCost.reduce((acc, curVal) => acc + curVal + init));
+
 // use as persistent layout
 defineOptions({ layout: AuthenticatedLayout });
 </script>
 
 <template>
-    <!-- {{ items }} -->
+    <span class="flex w-3 h-3 me-3 bg-red-500 rounded-full"></span>
     <Head title="Shopping Cart" />
     <section class="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
         <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
-            <!-- deleted item -->
-
             <h2
                 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl"
             >
@@ -52,8 +74,7 @@ defineOptions({ layout: AuthenticatedLayout });
             <div class="mt-6 sm:mt-8 md:gap-6 lg:flex lg:items-start xl:gap-8">
                 <div class="mx-auto w-full flex-none lg:max-w-2xl xl:max-w-4xl">
                     <div class="space-y-6">
-                        <!-- Items -->
-                        <div v-if="items.length === 0" class="font-bold">
+                        <div v-if="item.items.length === 0" class="font-bold">
                             wanna check our items?...
                             <Link :href="route('product.index')">
                                 <span class="text-sm text-blue-500 underline">
@@ -61,8 +82,9 @@ defineOptions({ layout: AuthenticatedLayout });
                                 </span>
                             </Link>
                         </div>
+                        <!-- Items -->
                         <div
-                            v-for="item in items"
+                            v-for="item in item.items"
                             class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-6"
                         >
                             <div
@@ -82,6 +104,14 @@ defineOptions({ layout: AuthenticatedLayout });
                                 >
                                     <div class="flex items-center">
                                         <button
+                                            @click="
+                                                addOrMinus(
+                                                    item.pivot.quantity,
+                                                    item.pivot.id,
+                                                    'minus'
+                                                )
+                                            "
+                                            :disabled="disabled"
                                             type="button"
                                             id="decrement-button-5"
                                             data-input-counter-decrement="counter-input-5"
@@ -104,6 +134,7 @@ defineOptions({ layout: AuthenticatedLayout });
                                             </svg>
                                         </button>
                                         <input
+                                            min="1"
                                             type="text"
                                             id="counter-input-5"
                                             data-input-counter
@@ -113,6 +144,13 @@ defineOptions({ layout: AuthenticatedLayout });
                                             required
                                         />
                                         <button
+                                            @click="
+                                                addOrMinus(
+                                                    item.pivot.quantity,
+                                                    item.pivot.id,
+                                                    'add'
+                                                )
+                                            "
                                             type="button"
                                             id="increment-button-5"
                                             data-input-counter-increment="counter-input-5"
@@ -214,6 +252,7 @@ defineOptions({ layout: AuthenticatedLayout });
                 </div>
 
                 <div
+                    v-if="item.items.length !== 0"
                     class="mx-auto mt-6 max-w-4xl flex-1 space-y-6 lg:mt-0 lg:w-full"
                 >
                     <div

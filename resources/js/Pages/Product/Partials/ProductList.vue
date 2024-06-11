@@ -1,22 +1,19 @@
 <script setup>
 import Modal from "@/Components/Modal.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
-import BuyNow from "./BuyNow.vue";
+
 import Card from "@/Components/Card.vue";
 import { ref } from "vue";
 import { Head, Link } from "@inertiajs/vue3";
 import SuccessButton from "@/Components/SuccessButton.vue";
+import AddToCartButton from "./AddToCartButton.vue";
 
 const displayingProduct = ref(false);
 const displayingCard = ref(false);
 const addToCart = ref("");
+const quantity = 1;
 
-function addOrBuy(aOrB) {
-    displayingCard.value = !displayingCard.value;
-    addToCart.value = aOrB;
-}
 defineProps(["item"]);
-
 const displayProduct = () => {
     displayingProduct.value = true;
 };
@@ -70,13 +67,12 @@ const closeModal = () => {
                     class="text-gray-400 font-bold items-center text-lg flex justify-between"
                 >
                     <div>Available Unit:{{ item.count }}</div>
-                    <div class="flex-grow-0">
-                        <SuccessButton @click="addOrBuy('Buy Now')"
-                            >Buy Now</SuccessButton
-                        >
-                        <SecondaryButton @click="addOrBuy('Add to Cart')">
-                            Add to Cart
-                        </SecondaryButton>
+                    <div class="flex-grow-0 flex gap-4">
+                        <SuccessButton>Buy Now</SuccessButton>
+                        <AddToCartButton
+                            :item="item"
+                            :item_quantity="quantity"
+                        ></AddToCartButton>
                     </div>
                 </div>
             </div>
