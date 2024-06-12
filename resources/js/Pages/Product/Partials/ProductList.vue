@@ -1,7 +1,5 @@
 <script setup>
 import Modal from "@/Components/Modal.vue";
-import SecondaryButton from "@/Components/SecondaryButton.vue";
-
 import Card from "@/Components/Card.vue";
 import { ref } from "vue";
 import { Head, Link } from "@inertiajs/vue3";

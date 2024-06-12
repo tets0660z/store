@@ -5,7 +5,7 @@ import { router } from "@inertiajs/vue3";
 import { ref } from "vue";
 import Swal from "sweetalert2";
 
-const item = defineProps(["items"]);
+const item = defineProps({ items: Object });
 
 function deleteToCart(id) {
     Swal.fire({
@@ -33,28 +33,30 @@ function deleteToCart(id) {
 
 const disabled = ref(false);
 function addOrMinus(quantity, id, operator) {
+    let parseQuantity = parseInt(quantity);
     if (operator === "add") {
-        quantity += 1;
+        parseQuantity += 1;
         disabled.value = false;
     } else {
-        if (quantity === 1) {
+        if (parseQuantity === 1) {
             disabled.value = true;
         } else {
-            quantity -= 1;
+            parseQuantity -= 1;
         }
     }
     router.patch(
         `/cart/${id}`,
-        { quantity: quantity },
+        { quantity: parseQuantity },
         { preserveScroll: true }
     );
 }
 
-const totalCost = item.items.map((result) => {
-    return parseInt(result.price);
+const itemCost = item.items.map((result) => {
+    return parseInt(result.price) * result.pivot.quantity;
 });
+
 const init = 0;
-console.log(totalCost.reduce((acc, curVal) => acc + curVal + init));
+const totalCost = itemCost.reduce((acc, curVal) => acc + curVal + init);
 
 // use as persistent layout
 defineOptions({ layout: AuthenticatedLayout });
@@ -177,7 +179,10 @@ defineOptions({ layout: AuthenticatedLayout });
                                         <p
                                             class="text-base font-bold text-gray-900 dark:text-white"
                                         >
-                                            $ {{ item.price }}
+                                            $
+                                            {{
+                                                item.pivot.quantity * item.price
+                                            }}
                                         </p>
                                     </div>
                                 </div>

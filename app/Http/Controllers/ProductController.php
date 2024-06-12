@@ -6,10 +6,12 @@ use App\Models\User;
 use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Product;
-use Illuminate\Http\Request;
-
 use function Pest\Laravel\json;
+
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Routing\Controller;
 
 class ProductController extends Controller
 {
@@ -23,13 +25,19 @@ class ProductController extends Controller
 
         return Inertia::render('Cart/Index', ['items' => $user->products]);
     }
-    public function index(): Response
+    public function index()
     {
         
-        $items = Product::all();
-        return Inertia::render('Product/Index', ['items' => $items]);
+        $items =  Product::query()
+                ->when(Request::input('search'), function($query, $search) {
+                    $query->where('title','like',"%{$search}%");
+                })
+                ->paginate(15);
+        $items->withQueryString();
+
+        return Inertia::render('Product/Index',['items' => $items]);
     }
-    
+
     
     /**
      * Show the form for creating a new resource.

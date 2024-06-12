@@ -1,20 +1,15 @@
 <script setup>
 import { router, usePage } from "@inertiajs/vue3";
 import { reactive, ref } from "vue";
+import Swal from "sweetalert2";
 
 const product = defineProps(["item", "item_quantity"]);
 
 // disabling button
 const processing = ref(false);
+
 // use to access $page
 const page = usePage();
-
-// const form = reactive({
-//     price: product.item.price,
-//     product_id: product.item.id,
-//     quantity: product.item_quantity,
-//     user_id: page.props.auth.user.id,
-// });
 
 function addToCart() {
     console.log(product.item_quantity);
@@ -31,8 +26,16 @@ function addToCart() {
                 processing.value = true;
             },
             onFinish: () => {
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Added to Cart",
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
                 processing.value = false;
             },
+
             preserveScroll: true,
         }
     );

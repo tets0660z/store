@@ -1,13 +1,16 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import ProductList from "./Partials/ProductList.vue";
-import { Head, Link } from "@inertiajs/vue3";
-import { ref } from "vue";
+import { Head, router } from "@inertiajs/vue3";
+import { ref, watch } from "vue";
 
 import NavLink from "@/Components/NavLink.vue";
 
-const values = defineProps(["items"]);
-const search = ref("");
+defineProps({ items: Object });
+let search = ref("");
+watch(search, (value) => {
+    router.get("/product", { search: value }, { preserveState: true });
+});
 
 // use as persistent layout
 defineOptions({ layout: AuthenticatedLayout });
@@ -60,12 +63,25 @@ defineOptions({ layout: AuthenticatedLayout });
                 class="right-screen relative rounded-lg"
                 type="text"
                 placeholder="search items..."
-                v-model.lazy="search"
+                v-model="search"
             />
         </div>
     </header>
     <!-- Item Cards -->
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 gap-3" v-for="item in items">
-        <ProductList :item="item" :category="category"></ProductList>
+    <div
+        class="max-w-7xl mx-auto sm:px-6 lg:px-8 gap-3"
+        v-for="item in items.data"
+    >
+        <ProductList :item="item"></ProductList>
+    </div>
+    <div v-for="link in items.links" class="inline-flex">
+        <a
+            :href="link.url"
+            v-if="link.url"
+            v-html="link.label"
+            class="border border-gray-500 p-1"
+        >
+        </a>
+        <span v-else="link.label"></span>
     </div>
 </template>
