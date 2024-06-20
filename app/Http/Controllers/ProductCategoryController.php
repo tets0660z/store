@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
-use Illuminate\Http\Request;
-use App\Models\ProductCategory;
 use Inertia\Response;
+use App\Models\ProductCategory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Request;
 
 class ProductCategoryController extends Controller
 {
@@ -15,10 +16,9 @@ class ProductCategoryController extends Controller
      */
     public function index($category): Response
     {
+        $items = DB::table('products')->where('category', $category)->paginate(15);
         
-        $categories = Http::get("https://fakestoreapi.com/products/category/$category")->json();
-        // dd($categories);
-        return Inertia::render('Product/Index', ['items' => $categories]);
+        return Inertia::render('Product/Index', ['items' => $items, 'filters' => Request::only(['search'])]);
     }
 
     /**

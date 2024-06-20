@@ -50,13 +50,17 @@ function addOrMinus(quantity, id, operator) {
         { preserveScroll: true }
     );
 }
-
-const itemCost = item.items.map((result) => {
+let itemCost = ref(0);
+itemCost = item.items.map((result) => {
     return parseInt(result.price) * result.pivot.quantity;
 });
 
 const init = 0;
-const totalCost = itemCost.reduce((acc, curVal) => acc + curVal + init);
+let totalCost = ref(0);
+if (itemCost !== null) {
+    totalCost = itemCost.reduce((acc, curVal) => acc + curVal + init);
+    console.log(totalCost);
+}
 
 // use as persistent layout
 defineOptions({ layout: AuthenticatedLayout });
@@ -282,7 +286,7 @@ defineOptions({ layout: AuthenticatedLayout });
                                     <dd
                                         class="text-base font-medium text-gray-900 dark:text-white"
                                     >
-                                        $7,592.00
+                                        {{ totalCost }}
                                     </dd>
                                 </dl>
 

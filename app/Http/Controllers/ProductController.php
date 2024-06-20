@@ -32,11 +32,20 @@ class ProductController extends Controller
                 ->when(Request::input('search'), function($query, $search) {
                     $query->where('title','like',"%{$search}%");
                 })
-                ->paginate(15);
-        $items->withQueryString();
+                ->paginate(15)
+                ->withQueryString();
+        $filters = Request::only(['search']);
 
-        return Inertia::render('Product/Index',['items' => $items]);
+        return Inertia::render('Product/Index',['items' => $items, 'filters' => $filters]);
     }
+    public function categories()
+    {
+        
+        $categories =  Product::where('category')->get();
+
+        return Inertia::render('Product/Index',['categories' => $categories]);
+    }
+
 
     
     /**
